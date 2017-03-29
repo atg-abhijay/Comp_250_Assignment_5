@@ -18,6 +18,66 @@ class Sudoku
     public void solve()
     {
         /* INSERT YOUR CODE HERE */
+        for(int i = 0; i < this.N; i++) {
+            for(int j = 0; j < this.N; j++) {
+                boolean valid = isValid(i,j,this.Grid[i][j]);
+                if(!valid) {
+                    System.out.println("Pepepeppepepepe! The sudoku is not solved correctly!\n\n");
+                    return;
+                }
+            }
+        }
+        System.out.println("The sudoku is valid\n\n");
+    }
+
+    private boolean isValid(int row, int column, int number) {
+        /* int position = 0;
+        for(int i = 0; i < this.N; i++) {
+            if(number == this.Grid[0][i]) {
+                position = i;
+            }
+        } */
+        /* checks if the number occurs
+            only once in its row */
+        for(int j = 0; j < this.N; j++) {
+            if (j != column) {
+                if(number == this.Grid[row][j]) {
+                    System.out.println("Number: " + number);
+                    System.out.println("Grid row value (" + row + "," + j + "): " + this.Grid[row][j]);
+                    return false;
+                }
+            }
+        }
+
+        /* checks if the number occurs
+            only once in its column */
+        for(int i = 0; i < this.N; i++) {
+            if (i != row) {
+                if(number == this.Grid[i][column]) {
+                    System.out.println("Number: " + number);
+                    System.out.println("Grid column value(" + i + "," + column + "): " + this.Grid[i][column]);
+                    return false;
+                }
+            }
+        }
+
+        /* checks if the number occurs
+            only once in its box */
+        int boxRow = (row/this.SIZE) * this.SIZE;
+        int boxColumn = (column/this.SIZE) * this.SIZE;
+
+        for(int k = boxRow; k < boxRow + this.SIZE; k++) {
+            for(int p = boxColumn; p < boxColumn + this.SIZE; p++) {
+                if (k != row && p != column) {
+                    if(number == this.Grid[k][p]) {
+                        System.out.println("Number: " + number);
+                        System.out.println("Grid box value(" + k + "," + p + "): " + this.Grid[k][p]);
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 
