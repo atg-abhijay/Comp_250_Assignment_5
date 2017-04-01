@@ -181,7 +181,35 @@ class Sudoku
     private void insertAndBackTrack(int currentRow, int currentColumn, Stack<Integer> lastRowChanged, Stack<Integer> lastColumnChanged, Stack<Integer> lastValidVal) {
         this.print();
         System.out.println("\n\n");
+        /* int k = 1;
+        if(this.Grid[currentRow][currentColumn] != 0) {
+            k = this.Grid[currentRow][currentColumn] + 1;
+        } */
+        
+        for(int k = 1; k != this.Grid[currentRow][currentColumn] && k < 10; k++) {
+            if(this.isValid(currentRow, currentColumn, k)) {
+                this.Grid[currentRow][currentColumn] = k;
+                lastRowChanged.push(currentRow);
+                lastColumnChanged.push(currentColumn);
+                lastValidVal.push(k);
+                return;
+            }
+        }
 
+        /* Integer rowChanged = lastRowChanged.peek();
+        Integer columnChanged = lastColumnChanged.peek();
+        Integer validVal = lastValidVal.pop();
+
+        for(int p = validVal+1; p < 10; p++) {
+            if(this.isValid(rowChanged, columnChanged, p)) {
+                this.Grid[rowChanged][columnChanged] = p;
+                lastValidVal.push(p);
+                return;
+            }
+        } */
+
+        //this.Grid[currentRow][currentColumn] = 0;
+        this.insertAndBackTrack(lastRowChanged.pop(), lastColumnChanged.pop(), lastRowChanged, lastColumnChanged, lastValidVal);
         for(int k = 1; k < 10; k++) {
             if(this.isValid(currentRow, currentColumn, k)) {
                 this.Grid[currentRow][currentColumn] = k;
@@ -192,29 +220,12 @@ class Sudoku
             }
         }
 
-        Integer rowChanged = lastRowChanged.peek();
-        Integer columnChanged = lastColumnChanged.peek();
-        Integer validVal = lastValidVal.pop();
-
-        /* int rChanged = rowChanged.intValue();
-        int cChanged = columnChanged.intValue();
-        int value = validVal.intValue(); */
-
-        this.Grid[rowChanged][columnChanged] = 0;
-
-        for(int p = validVal+1; p < 10; p++) {
-            if(this.isValid(rowChanged, columnChanged, p)) {
-                this.Grid[rowChanged][columnChanged] = p;
-                lastValidVal.push(p);
-                return;
-            }
-        }
-
-
         this.insertAndBackTrack(lastRowChanged.pop(), lastColumnChanged.pop(), lastRowChanged, lastColumnChanged, lastValidVal);
+        
         this.print();
         System.out.println("(" + currentRow + "," + currentColumn + ")");
         System.out.println("\n");
+        return;
     }
 
     private int numZeroes() {
