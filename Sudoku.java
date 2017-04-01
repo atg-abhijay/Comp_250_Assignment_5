@@ -28,6 +28,8 @@ class Sudoku
             }
         }
         System.out.println("The sudoku is valid\n\n"); */
+        /* int changedRow = 0;
+        int changedColumn = 0;
 
         for(int i = 0; i < this.N; i++) {
             for(int j = 0; j < this.N; j++) {
@@ -39,13 +41,16 @@ class Sudoku
                                 continue;
                             }
                             else {
-                                
+                                this.Grid[changedRow][changedColumn] = 0;
+                                this.solve();
                             }
                             
                         }
                         this.Grid[i][j] = k;
                         break;
                     }
+                    changedRow = i;
+                    changedColumn = j;
                 }
 
             }
@@ -60,16 +65,47 @@ class Sudoku
                 }
             }
         }
-        System.out.println("\n\n");
+        System.out.println("\n\n"); */
+
+        int numZeroes = 0;
+        boolean sudokuValid = true;
+        for(int i = 0; i < this.N; i++) {
+            for(int j = 0; j < this.N; j++) {
+
+                if(this.Grid[i][j] == 0) {
+                    numZeroes++;
+                }
+
+                if(!isValid(i,j,this.Grid[i][j])) {
+                    sudokuValid = false;
+                }
+                
+            }
+        }
+
+        if(numZeroes == 0 && sudokuValid) {
+            return;
+        }
+
+        for(int i = 0; i < this.N; i++) {
+
+        }
+
+    }
+
+    private int numZeroes() {
+        int numZeroes = 0;
+        for(int i = 0; i < this.N; i++) {
+            for(int j = 0; j < this.N; j++) {
+                if(this.Grid[i][j] == 0) {
+                    numZeroes++;
+                }
+            }
+        }
+        return numZeroes;
     }
 
     private boolean isValid(int row, int column, int number) {
-        /* int position = 0;
-        for(int i = 0; i < this.N; i++) {
-            if(number == this.Grid[0][i]) {
-                position = i;
-            }
-        } */
         /* checks if the number occurs
             only once in its row */
         for(int j = 0; j < this.N; j++) {
