@@ -76,7 +76,7 @@ class Sudoku
                     numZeroes++;
                 }
 
-                if(!isValid(i,j,this.Grid[i][j])) {
+                if(!this.isValid(i,j,this.Grid[i][j])) {
                     sudokuValid = false;
                 }
                 
@@ -84,13 +84,50 @@ class Sudoku
         }
 
         if(numZeroes == 0 && sudokuValid) {
+            System.out.println("\n\n");
             return;
         }
 
+
+        int changedRow = 0;
+        int changedColumn = 0;
+        int lastValidVal = 0;
         for(int i = 0; i < this.N; i++) {
+            for(int j = 0; j < this.N; j++) {
 
+                if(this.Grid[i][j] == 0) {
+                    for(int k = 1; k < 10; k++) {
+                        if(this.isValid(i,j,k)) {
+                            this.Grid[i][j] = k;
+                            changedRow = i;
+                            changedColumn = j;
+                            lastValidVal = k;
+                            System.out.println("(" + i + "," + j + ") = " + k);
+                            break;
+                        }
+                        /* else { 
+                            if(!this.isValid(i,j,k) && k == 9) {
+                                this.Grid[changedRow][changedColumn] = lastValidVal+1;
+                                this.solve();
+                            }
+                        } */
+                    }
+                }
+
+            }
         }
+        System.out.println("\n\n");
 
+    }
+
+    private void backTracking(int changedRow, int changedColumn, int lastValidVal) {
+        if(this.isValid(changedRow, changedColumn, lastValidVal+1)) {
+            this.Grid[changedRow][changedColumn] = lastValidVal+1;
+            return;
+        }
+        else {
+            
+        }
     }
 
     private int numZeroes() {
