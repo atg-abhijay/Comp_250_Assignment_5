@@ -126,7 +126,7 @@ class Sudoku
                 if(this.Grid[i][j] == 0) {
                     //this.insertAndBackTrack(i,j,lastRowChanged, lastColumnChanged, lastValidVal);
                     boolean ableToInsert = false;
-                    for(int k = 1; k < 10; k++) {
+                    for(int k = 1; k < this.N + 1; k++) {
                         if(this.isValid(i,j,k)) {
                             this.Grid[i][j] = k;
                             lastRowChanged.push(i);
@@ -167,7 +167,7 @@ class Sudoku
     }
 
     private void backTrack(int currentRow, int currentColumn, Stack<Integer> lastRowChanged, Stack<Integer> lastColumnChanged, Stack<Integer> lastValidVal) {
-        for(int p = lastValidVal.peek()+1; p < 10; p++) {
+        for(int p = lastValidVal.peek()+1; p < this.N + 1; p++) {
             if(this.isValid(currentRow, currentColumn, p)) {
                 this.Grid[currentRow][currentColumn] = p;
                 lastValidVal.pop();
