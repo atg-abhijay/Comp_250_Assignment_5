@@ -183,7 +183,7 @@ class Sudoku
         this.backTrack(lastRowChanged.peek(), lastColumnChanged.peek(), lastRowChanged, lastColumnChanged, lastValidVal);
 
         //this.print();
-        System.out.println("(" + currentRow + "," + currentColumn + ")");
+        //System.out.println("(" + currentRow + "," + currentColumn + ")");
         //System.out.println("\n");
         //this.solve();
         return;
