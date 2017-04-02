@@ -133,8 +133,8 @@ class Sudoku
                             lastColumnChanged.push(j);
                             lastValidVal.push(k);
                             ableToInsert = true;
-                            this.print();
-                            System.out.println("\n\n");
+                            //this.print();
+                            //System.out.println("\n\n");
                             break;
                         }
                     }
@@ -178,13 +178,13 @@ class Sudoku
 
         lastRowChanged.pop(); lastColumnChanged.pop(); lastValidVal.pop();
         this.Grid[currentRow][currentColumn] = 0;
-        this.print();
-        System.out.println("\n\n");
+        //this.print();
+        //System.out.println("\n\n");
         this.backTrack(lastRowChanged.peek(), lastColumnChanged.peek(), lastRowChanged, lastColumnChanged, lastValidVal);
 
-        this.print();
+        //this.print();
         System.out.println("(" + currentRow + "," + currentColumn + ")");
-        System.out.println("\n");
+        //System.out.println("\n");
         //this.solve();
         return;
     }
@@ -397,7 +397,10 @@ class Sudoku
         // Solve the puzzle.  We don't currently check to verify that the puzzle can be
         // successfully completed.  You may add that check if you want to, but it is not
         // necessary.
+        long startTime = System.nanoTime();
         s.solve();
+        long stopTime = System.nanoTime() - startTime;
+        System.out.println(stopTime/(Math.pow(10,6)) + " milliseconds\n");
 
         // Print out the (hopefully completed!) puzzle
         s.print();
