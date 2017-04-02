@@ -123,108 +123,69 @@ class Sudoku
 
         for(int i = 0; i < this.N; i++) {
             for(int j = 0; j < this.N; j++) {
-
                 if(this.Grid[i][j] == 0) {
-                    //
-                    this.insertAndBackTrack(i,j,lastRowChanged, lastColumnChanged, lastValidVal);
-                    /* for(int k = 1; k < 10; k++) {
-                        
+                    //this.insertAndBackTrack(i,j,lastRowChanged, lastColumnChanged, lastValidVal);
+                    boolean ableToInsert = false;
+                    for(int k = 1; k < 10; k++) {
                         if(this.isValid(i,j,k)) {
                             this.Grid[i][j] = k;
                             lastRowChanged.push(i);
                             lastColumnChanged.push(j);
                             lastValidVal.push(k);
+                            ableToInsert = true;
+                            this.print();
+                            System.out.println("\n\n");
                             break;
                         }
+                    }
 
-                        else {
-                            if(!this.isValid(i,j,k) && k == 9) {
-                                int lastRowChanged = lastRowChanged.peek();
-                                int lastColumnChanged = lastColumnChanged.peek();
-                                int lastValidVal = lastValidVal.pop();
-                                this.Grid[lastRowChanged][lastColumnChanged] = 0;
-                                //
-
-                                for(int p = lastValidVal+1; p < 10; p++) {
-
-                                    if(this.isValid(lastRowChanged, lastColumnChanged, p)) {
-                                        this.Grid[lastRowChanged][lastColumnChanged] = p;
-                                        lastValidVal.push(p);
-                                        break;
+                    if(!ableToInsert) {
+                        backTrack(lastRowChanged.peek(), lastColumnChanged.peek(), lastRowChanged, lastColumnChanged, lastValidVal);
+                        search:
+                        for(int p = 0; p < this.N; p++) {
+                            for(int q = 0; q < this.N; q++) {
+                                if(this.Grid[p][q] == 0) {
+                                    if(j == this.N - 1 && p != 0) {
+                                        i = p-1;
                                     }
                                     else {
-                                        if(!this.isValid(lastRowChanged, lastColumnChanged, p) && p == 9) {
-                                            lastColumnChanged.pop();
-                                            lastRowChanged.pop();
-                                            int rowChanged = lastRowChanged.pop();
-                                            int columnChanged = lastColumnChanged.pop();
-                                            int validVal = lastValidVal.pop();
-                                        }
+                                        i = p;
                                     }
+                                    j = q-1;
+                                    break search;
                                 }
                             }
                         }
-
-                    } */
+                    }
+                    
                     
                 }
             }
-
         }
-
-
-
         System.out.println("\n\n");
 
     }
 
-    private void insertAndBackTrack(int currentRow, int currentColumn, Stack<Integer> lastRowChanged, Stack<Integer> lastColumnChanged, Stack<Integer> lastValidVal) {
-        this.print();
-        System.out.println("\n\n");
-        /* int k = 1;
-        if(this.Grid[currentRow][currentColumn] != 0) {
-            k = this.Grid[currentRow][currentColumn] + 1;
-        } */
-        
-        for(int k = 1; k != this.Grid[currentRow][currentColumn] && k < 10; k++) {
-            if(this.isValid(currentRow, currentColumn, k)) {
-                this.Grid[currentRow][currentColumn] = k;
-                lastRowChanged.push(currentRow);
-                lastColumnChanged.push(currentColumn);
-                lastValidVal.push(k);
-                return;
-            }
-        }
-
-        /* Integer rowChanged = lastRowChanged.peek();
-        Integer columnChanged = lastColumnChanged.peek();
-        Integer validVal = lastValidVal.pop();
-
-        for(int p = validVal+1; p < 10; p++) {
-            if(this.isValid(rowChanged, columnChanged, p)) {
-                this.Grid[rowChanged][columnChanged] = p;
+    private void backTrack(int currentRow, int currentColumn, Stack<Integer> lastRowChanged, Stack<Integer> lastColumnChanged, Stack<Integer> lastValidVal) {
+        for(int p = lastValidVal.peek()+1; p < 10; p++) {
+            if(this.isValid(currentRow, currentColumn, p)) {
+                this.Grid[currentRow][currentColumn] = p;
+                lastValidVal.pop();
                 lastValidVal.push(p);
                 return;
             }
-        } */
-
-        //this.Grid[currentRow][currentColumn] = 0;
-        this.insertAndBackTrack(lastRowChanged.pop(), lastColumnChanged.pop(), lastRowChanged, lastColumnChanged, lastValidVal);
-        for(int k = 1; k < 10; k++) {
-            if(this.isValid(currentRow, currentColumn, k)) {
-                this.Grid[currentRow][currentColumn] = k;
-                lastRowChanged.push(currentRow);
-                lastColumnChanged.push(currentColumn);
-                lastValidVal.push(k);
-                return;
-            }
         }
 
-        this.insertAndBackTrack(lastRowChanged.pop(), lastColumnChanged.pop(), lastRowChanged, lastColumnChanged, lastValidVal);
-        
+        lastRowChanged.pop(); lastColumnChanged.pop(); lastValidVal.pop();
+        this.Grid[currentRow][currentColumn] = 0;
+        this.print();
+        System.out.println("\n\n");
+        this.backTrack(lastRowChanged.peek(), lastColumnChanged.peek(), lastRowChanged, lastColumnChanged, lastValidVal);
+
         this.print();
         System.out.println("(" + currentRow + "," + currentColumn + ")");
         System.out.println("\n");
+        //this.solve();
         return;
     }
 
