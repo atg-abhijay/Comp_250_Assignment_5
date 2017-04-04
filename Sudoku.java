@@ -19,16 +19,35 @@ class Sudoku
     {
         /* INSERT YOUR CODE HERE */
         
+        /* since I intend to solve the sudoku using
+            backtracking, I create three stacks that
+            keep track of the coordinates of the last
+            row changed, last column changed and the
+            last value/number added to the sudoku */
+
         Stack<Integer> lastRowChanged = new Stack<Integer>();
         Stack<Integer> lastColumnChanged = new Stack<Integer>();
         Stack<Integer> lastValidVal = new Stack<Integer>();
 
         for(int i = 0; i < this.N; i++) {
             for(int j = 0; j < this.N; j++) {
+
+                /* there is something to do only if
+                    the cell is empty (that is, it
+                    contains 0) */
                 if(this.Grid[i][j] == 0) {
+                    /* the boolean keeps track of whether it is
+                        possible to insert a number at the given
+                        cell or not */
                     boolean ableToInsert = false;
                     for(int k = 1; k < this.N + 1; k++) {
                         if(this.isValid(i,j,k)) {
+                            /* (as soon as we reach the first valid number
+                                we break and exit this for loop)
+                                if it is valid to insert the number
+                                k at the given cell, then we assign
+                                the number k to the cell and update
+                                the 3 stacks to account for this change */
                             this.Grid[i][j] = k;
                             lastRowChanged.push(i);
                             lastColumnChanged.push(j);
@@ -38,8 +57,20 @@ class Sudoku
                         }
                     }
 
+                    /* if we are not able to insert a number at the
+                        given cell, that means that we made a mistake
+                        somewhere and so we must go back and change
+                        our numbers. for this purpose we use the backTrack method */
                     if(!ableToInsert) {
+                        /* to the method backTrack, we give as input the row
+                            and column numbers where we last made changes. we
+                            also pass the stacks so that they may be updated */
                         backTrack(lastRowChanged.peek(), lastColumnChanged.peek(), lastRowChanged, lastColumnChanged, lastValidVal);
+                        /* while the method backTrack was running, it went back and
+                            changed some cells to zero (since the previous numbers
+                            didn't work). so the nested loop below finds the first
+                            zero in the sudoku and makes the entire, bigger loop
+                            run from there again */
                         search:
                         for(int p = 0; p < this.N; p++) {
                             for(int q = 0; q < this.N; q++) {
@@ -65,27 +96,61 @@ class Sudoku
 
     }
 
+    /* the method backTrack takes as input the row
+        and column number (therefore a specific cell)
+        where we want to make a change and also the
+        3 stacks so that we may update them */
     private void backTrack(int currentRow, int currentColumn, Stack<Integer> lastRowChanged, Stack<Integer> lastColumnChanged, Stack<Integer> lastValidVal) {
+        /* we start trying values from the value
+            that is one higher than what the cell
+            was storing previously 
+
+            for example, if the cell stored 5 previously,
+            we will now start trying values from 6 onwards */
         for(int p = lastValidVal.peek()+1; p < this.N + 1; p++) {
+            /* we check if its valid to enter the value 'p'
+                at the given row and column (therefore the
+                specific cell) */
             if(this.isValid(currentRow, currentColumn, p)) {
                 this.Grid[currentRow][currentColumn] = p;
+                /* we remove the previous (incorrect) value
+                    stored in this cell from the stack and
+                    update the stack with this new value */
                 lastValidVal.pop();
                 lastValidVal.push(p);
                 return;
             }
         }
 
+        /* if we reach this point, that means that 
+            there was no value which could be inserted
+            in the cell. this means that we must further
+            backtrack and therefore we pop the row, column
+            numbers and the last valid value from the stacks */
         lastRowChanged.pop(); lastColumnChanged.pop(); lastValidVal.pop();
         this.Grid[currentRow][currentColumn] = 0;
+        /* here we recursively call backTrack with the last valid
+            spot in the sudoku. we stop only when we are able to
+            succesfully enter a value in the cell */
         this.backTrack(lastRowChanged.peek(), lastColumnChanged.peek(), lastRowChanged, lastColumnChanged, lastValidVal);
         return;
     }
 
-
+    /* isValid takes as input a row number, a column number
+        (therefore a specific cell) and a number that we
+        want to try. it tells us if its okay or not for
+        that number to be in that cell */
     private boolean isValid(int row, int column, int number) {
         /* checks if the number occurs
             only once in its row */
         for(int j = 0; j < this.N; j++) {
+            /* we use the condition j != column
+                so that the method doesn't check
+                at the number's own place (otherwise
+                the method would always return false)
+
+                we have similar conditions for column
+                checking and box checking as well */
             if (j != column) {
                 if(number == this.Grid[row][j]) {
                     return false;
@@ -105,6 +170,19 @@ class Sudoku
 
         /* checks if the number occurs
             only once in its box */
+        
+        /* here we take advantage of integer
+            division. consider the case of a
+            3x3 sudoku. the 'boxes' are in a
+            3x3 grid. 
+
+            rows 0,1,2 belong to a box which starts with row 0
+            rows 3,4,5 belong to a box which starts with row 3
+            rows 6,7,8 belong to a box which starts with row 6
+            similarly for columns as well
+
+            for example, for row 4:
+            boxRow = (4/3) * 3 = 1 * 3 = 3 */
         int boxRow = (row/this.SIZE) * this.SIZE;
         int boxColumn = (column/this.SIZE) * this.SIZE;
 
