@@ -18,105 +18,7 @@ class Sudoku
     public void solve()
     {
         /* INSERT YOUR CODE HERE */
-        /* for(int i = 0; i < this.N; i++) {
-            for(int j = 0; j < this.N; j++) {
-                boolean valid = isValid(i,j,this.Grid[i][j]);
-                if(!valid) {
-                    System.out.println("Pepepeppepepepe! The sudoku is not solved correctly!\n\n");
-                    return;
-                }
-            }
-        }
-        System.out.println("The sudoku is valid\n\n"); */
-        /* int changedRow = 0;
-        int changedColumn = 0;
-
-        for(int i = 0; i < this.N; i++) {
-            for(int j = 0; j < this.N; j++) {
-
-                if(this.Grid[i][j] == 0) {
-                    for(int k = 1; k < 10; k++) {
-                        if(!isValid(i,j,k)) {
-                            if (k != 9) {
-                                continue;
-                            }
-                            else {
-                                this.Grid[changedRow][changedColumn] = 0;
-                                this.solve();
-                            }
-                            
-                        }
-                        this.Grid[i][j] = k;
-                        break;
-                    }
-                    changedRow = i;
-                    changedColumn = j;
-                }
-
-            }
-        }
-
-        for(int i = 0; i < this.N; i++) {
-            for(int j = 0; j < this.N; j++) {
-                if(this.Grid[i][j] == 0) {
-                    for(int k = 1; k < 10; k++) {
-
-                    }
-                }
-            }
-        }
-        System.out.println("\n\n"); */
-
-        /* int numZeroes = 0;
-        boolean sudokuValid = true;
-        for(int i = 0; i < this.N; i++) {
-            for(int j = 0; j < this.N; j++) {
-
-                if(this.Grid[i][j] == 0) {
-                    numZeroes++;
-                }
-
-                if(!this.isValid(i,j,this.Grid[i][j])) {
-                    sudokuValid = false;
-                }
-                
-            }
-        }
-
-        if(numZeroes == 0 && sudokuValid) {
-            System.out.println("\n\n");
-            return;
-        }
-
-
-        int changedRow = 0;
-        int changedColumn = 0;
-        int lastValidVal = 0;
-        for(int i = 0; i < this.N; i++) {
-            for(int j = 0; j < this.N; j++) {
-
-                if(this.Grid[i][j] == 0) {
-                    for(int k = 1; k < 10; k++) {
-                        if(this.isValid(i,j,k)) {
-                            this.Grid[i][j] = k;
-                            changedRow = i;
-                            changedColumn = j;
-                            lastValidVal = k;
-                            System.out.println("(" + i + "," + j + ") = " + k);
-                            break;
-                        }
-                        else { 
-                            if(!this.isValid(i,j,k) && k == 9) {
-                                this.Grid[changedRow][changedColumn] = lastValidVal+1;
-                                this.solve();
-                            }
-                        }
-                    }
-                }
-
-            }
-        } */
-
+        
         Stack<Integer> lastRowChanged = new Stack<Integer>();
         Stack<Integer> lastColumnChanged = new Stack<Integer>();
         Stack<Integer> lastValidVal = new Stack<Integer>();
@@ -124,7 +26,6 @@ class Sudoku
         for(int i = 0; i < this.N; i++) {
             for(int j = 0; j < this.N; j++) {
                 if(this.Grid[i][j] == 0) {
-                    //this.insertAndBackTrack(i,j,lastRowChanged, lastColumnChanged, lastValidVal);
                     boolean ableToInsert = false;
                     for(int k = 1; k < this.N + 1; k++) {
                         if(this.isValid(i,j,k)) {
@@ -133,8 +34,6 @@ class Sudoku
                             lastColumnChanged.push(j);
                             lastValidVal.push(k);
                             ableToInsert = true;
-                            //this.print();
-                            //System.out.println("\n\n");
                             break;
                         }
                     }
@@ -178,28 +77,10 @@ class Sudoku
 
         lastRowChanged.pop(); lastColumnChanged.pop(); lastValidVal.pop();
         this.Grid[currentRow][currentColumn] = 0;
-        //this.print();
-        //System.out.println("\n\n");
         this.backTrack(lastRowChanged.peek(), lastColumnChanged.peek(), lastRowChanged, lastColumnChanged, lastValidVal);
-
-        //this.print();
-        //System.out.println("(" + currentRow + "," + currentColumn + ")");
-        //System.out.println("\n");
-        //this.solve();
         return;
     }
 
-    private int numZeroes() {
-        int numZeroes = 0;
-        for(int i = 0; i < this.N; i++) {
-            for(int j = 0; j < this.N; j++) {
-                if(this.Grid[i][j] == 0) {
-                    numZeroes++;
-                }
-            }
-        }
-        return numZeroes;
-    }
 
     private boolean isValid(int row, int column, int number) {
         /* checks if the number occurs
@@ -207,8 +88,6 @@ class Sudoku
         for(int j = 0; j < this.N; j++) {
             if (j != column) {
                 if(number == this.Grid[row][j]) {
-                    //System.out.println("Number: " + number);
-                    //System.out.println("Grid row value (" + row + "," + j + "): " + this.Grid[row][j]);
                     return false;
                 }
             }
@@ -219,8 +98,6 @@ class Sudoku
         for(int i = 0; i < this.N; i++) {
             if (i != row) {
                 if(number == this.Grid[i][column]) {
-                    //System.out.println("Number: " + number);
-                    //System.out.println("Grid column value(" + i + "," + column + "): " + this.Grid[i][column]);
                     return false;
                 }
             }
@@ -235,8 +112,6 @@ class Sudoku
             for(int p = boxColumn; p < boxColumn + this.SIZE; p++) {
                 if (k != row && p != column) {
                     if(number == this.Grid[k][p]) {
-                        //System.out.println("Number: " + number);
-                        //System.out.println("Grid box value(" + k + "," + p + "): " + this.Grid[k][p]);
                         return false;
                     }
                 }
