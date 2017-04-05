@@ -350,10 +350,10 @@ class Sudoku
         // Solve the puzzle.  We don't currently check to verify that the puzzle can be
         // successfully completed.  You may add that check if you want to, but it is not
         // necessary.
-        long startTime = System.nanoTime();
+        //long startTime = System.nanoTime();
         s.solve();
-        long stopTime = System.nanoTime() - startTime;
-        System.out.println(stopTime/(Math.pow(10,6)) + " milliseconds\n");
+        //long stopTime = System.nanoTime() - startTime;
+        //System.out.println(stopTime/(Math.pow(10,6)) + " milliseconds\n");
 
         // Print out the (hopefully completed!) puzzle
         s.print();
